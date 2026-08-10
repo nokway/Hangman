@@ -3,14 +3,11 @@ require_relative 'io_creator'
 
 # Reader of file class
 class Reader
-
   attr_accessor :file
 
   def initialize
     @file = AcessFile.new.file
   end
-
-  
 
   def make_array
     array =
@@ -22,5 +19,4 @@ class Reader
   end
 end
 
-Reader.new.make_array
 
