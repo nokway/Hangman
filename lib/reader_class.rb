@@ -18,5 +18,3 @@ class Reader
     array
   end
 end
-
-
