@@ -5,7 +5,7 @@ class Lives
     @lives = 0
   end
 
-  def set_lives(word_length)
+  def lives_word(word_length)
     self.lives = word_length
   end
 end

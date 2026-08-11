@@ -1,5 +1,6 @@
 require_relative 'reader_class'
 
+# Selects random word
 class Selection
   attr_accessor :array
  
@@ -12,4 +13,4 @@ class Selection
   end
 end
 
-p Selection.new.choose_random_word
+
