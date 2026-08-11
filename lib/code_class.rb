@@ -13,6 +13,14 @@ class Code
     p code
     code.split('').map { |_| '_' }
   end
+
+  def check_underscore
+    copy = code.clone
+    return false unless copy.split("").each { |v| v == '_' }
+
+    true
+  end
 end
 
 p Code.new.add_underscores
+p Code.new.check_underscore
