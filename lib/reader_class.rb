@@ -1,20 +1,23 @@
 require 'pry'
-require_relative 'io_creator'
+require_relative 'file_accessor'
 
 # Reader of file class
 class Reader
-  attr_accessor :file
+  attr_accessor :file, :array
 
-  def initialize
-    @file = AcessFile.new.file
+  def initialize(file)
+    @file = file
+    @array = []
   end
 
   def make_array
-    array =
+    self.array =
       file.readlines.select do |v|
         v.chomp.length > 4 && v.chomp.length < 13
       end
-    @file.close
-    array
+  end
+
+  def choose_random_word(array)
+    array.sample.chomp
   end
 end
