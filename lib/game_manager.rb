@@ -29,5 +29,4 @@ class Game
   
 end
 
-file = Game.new.file_accessor.access_file
-file.close
+

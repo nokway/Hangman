@@ -17,7 +17,7 @@ class Reader
       end
   end
 
-  def choose_random_word(array)
+  def choose_random_word
     array.sample.chomp
   end
 end
