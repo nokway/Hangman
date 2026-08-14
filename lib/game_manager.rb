@@ -5,7 +5,7 @@ class Game
   attr_accessor :code, :code_maker
 
   def initialize
-    @code_maker = FileAccessor.new 
+    @code_maker = FileAccessor.new
     @code = Code.new(word)
   end
 
