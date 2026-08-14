@@ -1,12 +1,11 @@
-require_relative 'selection'
 
 # Handles code
 class Code
   attr_accessor :code
 
-  def initialize
-    @code = Selection.new.choose_random_word
-  end
+  def initialize(code)
+   @code = code  
+  end 
 
   def add_underscores
     p 'Code: '
@@ -14,13 +13,9 @@ class Code
     code.split('').map { |_| '_' }
   end
 
-  def check_underscore
-    copy = code.clone
-    return false unless copy.split("").each { |v| v == '_' }
-
-    true
+  def display_code
+    p code
   end
-end
 
-p Code.new.add_underscores
-p Code.new.check_underscore
+
+end
