@@ -34,10 +34,9 @@ class Game
   end
 
   def serialization_test
-    file_accessor.save_file(Serialization.save_data(lives_handler.lives, code, 'e'))
+    file_accessor.save_file(Serialization.save_data(lives_handler.lives, code.code, 'e'))
   end
 end
 
 game1 = Game.new
 game1.serialization_test
-
