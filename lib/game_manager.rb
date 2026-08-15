@@ -1,18 +1,21 @@
 require_relative 'file_accessor'
 require_relative 'code_class'
+require_relative 'serializer'
+require_relative 'lives_handler'
 
 class Game
-  attr_accessor :code, :code_maker
+  attr_accessor :code, :file_accessor, :lives_handler
 
   def initialize
-    @code_maker = FileAccessor.new
+    @file_accessor = FileAccessor.new
     @code = Code.new(word)
+    @lives_handler = Lives.new
   end
 
   def word
-    code_maker.access_file
-    code_maker.make_array
-    code_maker.choose_random_word
+    file_accessor.access_file
+    file_accessor.make_array
+    file_accessor.choose_random_word
   end
 
   def start
@@ -30,10 +33,11 @@ class Game
     true
   end
 
-
+  def serialization_test
+    file_accessor.save_file(Serialization.save_data(lives_handler.lives, code, 'e'))
+  end
 end
 
-
- game1 = Game.new
-
+game1 = Game.new
+game1.serialization_test
 
