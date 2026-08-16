@@ -36,5 +36,3 @@ class FileAccessor
   end
 end
 
-# TODO: FIX NOT BEING ABLE TO CALL SCRIPT UNLESS IN THE LIB< DUE TO TAKING THE RELATIVE PATH
-# Fix there not being a new file created each time the new game is made 
