@@ -40,7 +40,6 @@ end
 
 game1 = Game.new
 game1.serialization_test
-game222 = Game.new
-game222.serialization_test
+
 
 
