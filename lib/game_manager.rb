@@ -20,7 +20,7 @@ class Game
 
   def start
     loop do
-      # display code
+      # display code underscores
       # ask for guess
       # compare guess
       #
