@@ -9,8 +9,7 @@ class Serialization # rubocop:disable Style/Documentation
                     word: word,
                     last_guess: last_guess
                   })
-    
-  end  
+  end
 
   def self.load_data(json_obj)
     JSON.parse(json_obj)
