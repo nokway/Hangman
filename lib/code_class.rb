@@ -12,6 +12,10 @@ class Code
   end
 
   def algorithmize(guess)
+    return 'Invalid word size provided, try again' if guess.size != code.size
+
+    # Todo add handler in algorithmize function call prolly in game manager to ensure that it handles the return of the invalid message length correctly
+
     # TODO: ADD 1 and 2's for the handling of the values
     array1 = []
     p "testing, #{code}"
@@ -29,5 +33,3 @@ class Code
     p array1
   end
 end
-
-# TODO: Maybe add handling so that we con only ask for inputs that are of the correct word size.
