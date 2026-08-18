@@ -16,7 +16,7 @@ class Code
 
     # Todo add handler in algorithmize function call prolly in game manager to ensure that it handles the return of the invalid message length correctly
 
-    # TODO: ADD 1 and 2's for the handling of the values
+    # TODO: . Replace an underscore depending on the number, (1, or 2)
     array1 = []
     p "testing, #{code}"
     guess.split('').each_with_index do |v, i|
