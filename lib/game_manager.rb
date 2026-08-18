@@ -5,6 +5,7 @@ require_relative 'serializer'
 require_relative 'lives_handler'
 require_relative 'input_manager'
 
+# Main game handler
 class Game
   attr_accessor :code_manager, :file_accessor, :lives_handler, :input_manager
 
