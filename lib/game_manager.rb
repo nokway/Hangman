@@ -7,13 +7,14 @@ require_relative 'input_manager'
 
 # Main game handler
 class Game
-  attr_accessor :code_manager, :file_accessor, :lives_handler, :input_manager
+  attr_accessor :code_manager, :file_accessor, :lives_handler, :input_manager, :incorrect_letters_a
 
   def initialize
     @file_accessor = FileAccessor.new
     @code_manager = Code.new(word)
     @lives_handler = Lives.new
     @input_manager = InputManager.new
+    @incorrect_letters_a = []
   end
 
   def word
@@ -26,8 +27,19 @@ class Game
     code_manager.display_code
     loop do
       guess = input_manager.guess_v
-      redo if check_win(code_manager.code, guess)
+      next unless check_win(code_manager.code, guess) == false
+
+      lives_handler.lives -= 1
+
+      break if code_manager.algorithmize(guess) == false
+
+      incorrect_letters(code_manager.algorithmize(guess), guess)
     end
+  end
+
+  def incorrect_letters(algorithm, guess)
+    incorrect_letters_a.push(guess) if algorithm == 2
+    puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
   end
 
   def algorithmize_test
@@ -49,4 +61,4 @@ class Game
 end
 
 game1 = Game.new
-game1.algorithmize_test
+game1.start
