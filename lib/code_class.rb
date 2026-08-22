@@ -47,5 +47,3 @@ class Code
     fill_nill(missing_values(guess, save))
   end
 end
-
-# TODO: Understand whyyy its outputting nil although we have specified that it should replace nill with _
