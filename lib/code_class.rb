@@ -27,8 +27,7 @@ class Code
   def fill_nill(save)
     save_clone = save.clone
     save_clone.each_with_index do |v, i|
-      p v.nil?
-      save_clone[i] == '_ ' if v.nil?
+      save_clone[i] = '_' if v.nil?
     end
     p save_clone
     save_clone
@@ -48,3 +47,5 @@ class Code
     fill_nill(missing_values(guess, save))
   end
 end
+
+# TODO: Understand whyyy its outputting nil although we have specified that it should replace nill with _
