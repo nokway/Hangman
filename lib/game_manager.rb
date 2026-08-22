@@ -23,11 +23,10 @@ class Game
   end
 
   def start
+    code_manager.display_code
     loop do
-      # display code
-      # ask for guess
-      # compare guess
-      #
+      guess = input_manager.guess_v
+      redo if check_win(code_manager.code, guess)
     end
   end
 
