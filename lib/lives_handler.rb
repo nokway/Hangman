@@ -12,4 +12,8 @@ class Lives
   def display_lives
     p "Lives (you got one less): #{lives}"
   end
+
+  def lives_make(amount)
+    self.lives = amount
+  end
 end
