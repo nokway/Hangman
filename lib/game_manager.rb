@@ -83,7 +83,7 @@ class Game
         break
       end
 
-      if guess_save == '' # HERE (although now that i think of it, it isnt necessary)
+      if guess_save == '' # HERE (although now that i think of it, it isnt necessary cuz guess save would be blank, just have to fix that anniying error)
         guess = play_round_guess
         play_round_rest(guess)
       else
@@ -113,7 +113,7 @@ class Game
     incorrect_letters_a.push(guess) if algorithm == 2
     puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
 
-    # Todo, make it so you dont have double of the same
+    # Todo, make it so you dont have double of the same (like o, and o again in incorrect)
   end
 
   def algorithmize_test
