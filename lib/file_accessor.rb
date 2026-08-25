@@ -27,13 +27,19 @@ class FileAccessor
     @json_file = File.open("#{Dir.home}/programmin/repos/Hangman/data/#{number}.json", &:readline)
   end
 
+  def empty_file?(count)
+    return true if File.zero?("#{Dir.home}/programmin/repos/Hangman/data/#{count}.json")
+
+    false
+  end
+
   def save_file(data)
     # The number and path is cuz we need to name our files each time
-    number = Dir.glob(File.join("#{Dir.home}/Projects/programming/Hangman", '**json')).select do |file|
+    number = Dir.glob(File.join("#{Dir.home}/programmin/repos/Hangman", '**json')).select do |file|
       File.file?(file)
     end.count
     p number
-    path = File.new("#{Dir.home}/Projects/programming/Hangman/data/#{number + 1}.json", 'w')
+    path = File.new("#{Dir.home}/programmin/repos/Hangman/data/#{number + 1}.json", 'w')
     File.write(path, data)
   end
 

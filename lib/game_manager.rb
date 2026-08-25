@@ -71,24 +71,29 @@ class Game
   end
 
   def start
-    guess_save = save_option
-    # should only do this if we have data there already
+    guess_save = save_option if file_accessor.empty_file?(@@count) == false
+    round = 0
+
     # # We need to handle the error, so that maybe we check before hand if the file is empty as to not cause the error so that we can continue to our own chrcker labelee HERE
 
     loop do
-      answer = check_save?
+      answer = check_save? if round != 0
       if answer
         file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join('')))
-        puts 'saved and exited'
+        puts "Saved word: #{save}, exited successfully. "
         break
       end
 
-      if guess_save == '' # HERE (although now that i think of it, it isnt necessary cuz guess save would be blank, just have to fix that anniying error)
-        guess = play_round_guess
+      round += 1
+      p save
+
+      if guess_save.nil? # HERE (although now that i think of it, it isnt necessary cuz guess save would be blank, just have to fix that anniying error)
+        play_round_guess
+        guess = input_manager.guess_i
         play_round_rest(guess)
       else
-        play_save_guess(guess_save)
-        guess = guess_save
+        guess = play_save_guess(save)
+        # Bro why is this not working arghhhhh!!!
       end
 
       next unless check_win(code_manager.code, guess) == true
@@ -138,3 +143,5 @@ game1 = Game.new
 game1.start
 
 # TODO, FIX THE SAVING SO THAT IT LOADS PROPERLY< BASICALLY, LOAD NORMAL GUESS AND PLAY NORMALLY UNLESS YOU HAVE LOADED FROM THE SAVE, WHICH WE HAVE ALREADY HANDLED
+# WHY ON EARTH IS IT GETTING A NEW CODE
+# BRO WHAT ON EARTH IS HAPPENING
