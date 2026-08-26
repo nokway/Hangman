@@ -13,6 +13,8 @@ class Code
     p(copy.split('').map { |_| '_' })
   end
 
+  
+
   def algorithmize(guess)
     copy = code.clone.split('')
     return false if guess.size != 1

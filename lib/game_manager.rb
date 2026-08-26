@@ -1,4 +1,4 @@
-require('pry')
+require('pry-byebug')
 require_relative 'file_accessor'
 require_relative 'code_class'
 require_relative 'serializer'
@@ -66,15 +66,25 @@ class Game
     incorrect_letters(code_manager.algorithmize(guess), guess)
   end
 
+  def play_round_rest_save(guess)
+    if code_manager.algorithmize(guess) == 2
+      lives_handler.lives -= 1
+      lives_handler.display_lives
+    end
+
+    self.save = code_manager.total_output(guess, save)
+
+    incorrect_letters(code_manager.algorithmize(guess), guess)
+  end
+
   def play_save_guess(guess)
-    play_round_rest(guess)
+    # play_round_rest(guess)
   end
 
   def start
+    byebug
     guess_save = save_option if file_accessor.empty_file?(@@count) == false
     round = 0
-
-    # # We need to handle the error, so that maybe we check before hand if the file is empty as to not cause the error so that we can continue to our own chrcker labelee HERE
 
     loop do
       answer = check_save? if round != 0
@@ -96,10 +106,10 @@ class Game
         # Bro why is this not working arghhhhh!!!
       end
 
-      next unless check_win(code_manager.code, guess) == true
+      next unless check_win(code_manager.code, save) == true
 
       # No winning message
-      pits 'you win!'
+      puts 'you win!'
       puts save
       p code_manager.code
       break
@@ -145,3 +155,8 @@ game1.start
 # TODO, FIX THE SAVING SO THAT IT LOADS PROPERLY< BASICALLY, LOAD NORMAL GUESS AND PLAY NORMALLY UNLESS YOU HAVE LOADED FROM THE SAVE, WHICH WE HAVE ALREADY HANDLED
 # WHY ON EARTH IS IT GETTING A NEW CODE
 # BRO WHAT ON EARTH IS HAPPENING
+# IF we have incorrectly guessed a letter, and therefore we can not have a save, as fill nill would give us nothing,
+# then when choosing to save, self.save  becomes ''
+# then if we are importing a save, all we got to do is check if the last guess is empty (which makes us know we had an incorrect guess)
+# in which case we would look at all of the incorrect letters, and the lives (because one life is deducted each time)
+# and then we go from there, which would probably just be asking for a new guess
