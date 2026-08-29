@@ -27,18 +27,18 @@ class Game
     file_accessor.choose_random_word
   end
 
-  def save_option
-    puts 'Do you want to get a  save? save / no: '
+  def get_save # rubocop:disable Naming/AccessorMethodName
+    puts 'Do you want to get a  save? yes / no: '
     answer = gets.chomp.downcase
-    return unless answer == 'save'
+    return unless answer == 'yes'
 
-    file_accessor.json_file_a(@@count)
-    data = Serialization.load_data(file_accessor.json_file)
-    self.save = data[:last_guess]
-    lives_handler.lives = data[:lives]
-    code_manager.code = data[:word]
+    file_accessor.json_file_a(@@count) # Gets the json data file and read lines
+    data = Serialization.load_data(file_accessor.json_file) # Parses it in the serializer
+    self.save = data['last_guess']
+    lives_handler.lives = data['lives']
+    code_manager.code = data['word']
 
-    data[:last_guess]
+    'enabled'
   end
 
   def game_number_json
@@ -47,47 +47,40 @@ class Game
 
   def play_round_guess
     code_manager.display_code
-    if lives_handler.lives.negative?
-      # We simoly break in the maiin function if anything here returned false
-      return false
-    end
+    p incorrect_letters_a
 
+    # if lives_handler.lives.negative?
+    #   # We simoly break in the maiin function if anything here returned false
+    #   return false
+    # end
     input_manager.guess_v # return value
   end
 
-  def play_round_rest(guess)
-    if code_manager.algorithmize(guess) == 2
-      lives_handler.lives -= 1
-      lives_handler.display_lives
-    end
+  def decrement(guess)
+    return unless code_manager.algorithmize(guess) == 2
 
+    lives_handler.lives -= 1
+    lives_handler.display_lives
+  end
+
+  def play_round_rest(guess)
+    decrement(guess)
     self.save = code_manager.total_output(guess, save)
 
     incorrect_letters(code_manager.algorithmize(guess), guess)
   end
 
   def play_round_rest_save(guess)
-    if code_manager.algorithmize(guess) == 2
-      lives_handler.lives -= 1
-      lives_handler.display_lives
-    end
-
-    self.save = code_manager.total_output(guess, save)
-
-    incorrect_letters(code_manager.algorithmize(guess), guess)
-  end
-
-  def play_save_guess(guess)
-    # play_round_rest(guess)
+    self.save = code_manager.total_output(guess, save) # Get a new guess
   end
 
   def start
     byebug
-    guess_save = save_option if file_accessor.empty_file?(@@count) == false
+    guess_save = get_save if file_accessor.empty_file?(@@count) == false
     round = 0
 
     loop do
-      answer = check_save? if round != 0
+      answer = save_game? if round != 0
       if answer
         file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join('')))
         puts "Saved word: #{save}, exited successfully. "
@@ -95,20 +88,20 @@ class Game
       end
 
       round += 1
-      p save
 
-      if guess_save.nil? # HERE (although now that i think of it, it isnt necessary cuz guess save would be blank, just have to fix that anniying error)
-        play_round_guess
-        guess = input_manager.guess_i
-        play_round_rest(guess)
-      else
-        guess = play_save_guess(save)
-        # Bro why is this not working arghhhhh!!!
-      end
+      play_round_guess
+      guess = input_manager.guess_i
+
+      play_round_rest(guess)
 
       next unless check_win(code_manager.code, save) == true
 
-      # No winning message
+      if lives_handler.lives == code_manager.code.length
+        p 'You lost, insufficient amount of lives'
+        p "Lives: #{lives_handler.lives}"
+        break
+      end
+
       puts 'you win!'
       puts save
       p code_manager.code
@@ -116,7 +109,7 @@ class Game
     end
   end
 
-  def check_save?
+  def save_game?
     puts 'Do you want to save the game?'
     answer = gets.chomp.downcase
     return false unless answer == 'yes'
@@ -155,8 +148,13 @@ game1.start
 # TODO, FIX THE SAVING SO THAT IT LOADS PROPERLY< BASICALLY, LOAD NORMAL GUESS AND PLAY NORMALLY UNLESS YOU HAVE LOADED FROM THE SAVE, WHICH WE HAVE ALREADY HANDLED
 # WHY ON EARTH IS IT GETTING A NEW CODE
 # BRO WHAT ON EARTH IS HAPPENING
-# IF we have incorrectly guessed a letter, and therefore we can not have a save, as fill nill would give us nothing,
-# then when choosing to save, self.save  becomes ''
-# then if we are importing a save, all we got to do is check if the last guess is empty (which makes us know we had an incorrect guess)
-# in which case we would look at all of the incorrect letters, and the lives (because one life is deducted each time)
-# and then we go from there, which would probably just be asking for a new guess
+
+# THINGS I HAVE DONE
+# So essentially we realized that save would save the previous state of a game, meaning we can start a new round,
+# problem is that when we have only guessed incorrectly and we decide to save the game
+# we would have no knowledge of the previous incorrectly saves stuff, so what we can do is
+# we can print the incorrect guess array and save it from last time beasically (the only thing we would use from the last time maybe)
+# and then simply maybe do some check to ensure we dont have the same incorrect letters again, like handle a checker for that
+# and then we are good, because we would have imported the amount of lives correctly and therefore we also need to implement a feature
+# so that when a certain negative amount of lives have been reached it is game over (probably code length + 1 because we start the negative counting at 0)
+# and then we are done

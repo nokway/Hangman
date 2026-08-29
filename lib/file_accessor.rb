@@ -38,7 +38,6 @@ class FileAccessor
     number = Dir.glob(File.join("#{Dir.home}/programmin/repos/Hangman", '**json')).select do |file|
       File.file?(file)
     end.count
-    p number
     path = File.new("#{Dir.home}/programmin/repos/Hangman/data/#{number + 1}.json", 'w')
     File.write(path, data)
   end
