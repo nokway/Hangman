@@ -39,7 +39,10 @@ class Game
     lives_handler.lives = data['lives']
     code_manager.code = data['word']
     self.incorrect_letters_a = data['incorrect_array']
-    'enabled'
+
+    return unless check_win(code_manager.code, save) == true
+
+    'won already'
   end
 
   def game_number_json
@@ -82,11 +85,16 @@ class Game
   end
 
   def start
-    # byebug
     guess_save = get_save if file_accessor.empty_file?(@@count) == false
     round = 0
 
     loop do
+      if guess_save == 'won already'
+        puts 'you win!'
+        puts save
+        p code_manager.code
+        break
+      end
       answer = save_game? if round != 0 && redo_guess == 'no'
       if answer
         file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join(''),
@@ -99,7 +107,7 @@ class Game
 
       play_round_guess
       guess = input_manager.guess_i
-
+      byebug
       redo if play_round_rest(guess) == '2'
 
       self.redo_guess = 'no'
@@ -136,8 +144,6 @@ class Game
       puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
       'yes'
     end
-
-    # Todo, make it so you dont have double of the same (like o, and o again in incorrect)
   end
 
   def algorithmize_test
@@ -161,16 +167,18 @@ end
 game1 = Game.new
 game1.start
 
-# TODO, FIX THE SAVING SO THAT IT LOADS PROPERLY< BASICALLY, LOAD NORMAL GUESS AND PLAY NORMALLY UNLESS YOU HAVE LOADED FROM THE SAVE, WHICH WE HAVE ALREADY HANDLED
-# WHY ON EARTH IS IT GETTING A NEW CODE
-# BRO WHAT ON EARTH IS HAPPENING
-
 # THINGS I HAVE DONE
 # So essentially we realized that save would save the previous state of a game, meaning we can start a new round,
 # problem is that when we have only guessed incorrectly and we decide to save the game
 # we would have no knowledge of the previous incorrectly saves stuff, so what we can do is
 # we can print the incorrect guess array and save it from last time beasically (the only thing we would use from the last time maybe)
-# and then simply maybe do some check to ensure we dont have the same incorrect letters again, like handle a checker for that
+# and then maybe do some check to ensure we dont have the same incorrect letters again, handle a checker for that
 # and then we are good, because we would have imported the amount of lives correctly and therefore we also need to implement a feature
-# so that when a certain negative amount of lives have been reached it is game over (probably code length + 1 because we start the negative counting at 0)
-# and then we are done
+# so that when a certain negative amount of lives have been reached or incorrect letters length == code lenggth then  it is game over
+#
+#
+#
+# Another idea we could have an instance variable called win game, and set it to true if certain values are met, this way we could check if we won the game in the beginnning (maybe)
+
+# TODO:
+# fix that weird error when you are saving game, the normal mode should work as intended, goos job!

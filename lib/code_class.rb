@@ -29,7 +29,7 @@ class Code
     save_clone.each_with_index do |v, i|
       save_clone[i] = '_' if v.nil?
     end
-    p save_clone
+
     save_clone
   end
 
