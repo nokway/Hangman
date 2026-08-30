@@ -3,11 +3,12 @@
 require 'json'
 
 class Serialization # rubocop:disable Style/Documentation
-  def self.save_data(lives, word, last_guess)
+  def self.save_data(lives, word, last_guess, incorrect_array)
     JSON.generate({
                     lives: lives,
                     word: word,
-                    last_guess: last_guess
+                    last_guess: last_guess,
+                    incorrect_array: incorrect_array
                   })
   end
 

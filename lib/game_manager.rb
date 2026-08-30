@@ -19,6 +19,7 @@ class Game
     @incorrect_letters_a = []
     @save = []
     @@count += 1
+    @redo_guess = 'no'
   end
 
   def word
@@ -37,7 +38,7 @@ class Game
     self.save = data['last_guess']
     lives_handler.lives = data['lives']
     code_manager.code = data['word']
-
+    self.incorrect_letters_a = data['incorrect_array']
     'enabled'
   end
 
@@ -46,7 +47,11 @@ class Game
   end
 
   def play_round_guess
-    code_manager.display_code
+    if save == []
+      code_manager.display_code
+    else
+      p save.clone.split('')
+    end
     p incorrect_letters_a
 
     # if lives_handler.lives.negative?
@@ -67,6 +72,8 @@ class Game
     decrement(guess)
     self.save = code_manager.total_output(guess, save)
 
+    return '2' if incorrect_letters(code_manager.algorithmize(guess), guess) != 'yes'
+
     incorrect_letters(code_manager.algorithmize(guess), guess)
   end
 
@@ -80,7 +87,7 @@ class Game
     round = 0
 
     loop do
-      answer = save_game? if round != 0
+      answer = save_game? if round != 0 && redo_guess == 'no'
       if answer
         file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join('')))
         puts "Saved word: #{save}, exited successfully. "
@@ -92,7 +99,7 @@ class Game
       play_round_guess
       guess = input_manager.guess_i
 
-      play_round_rest(guess)
+      redo if play_round_rest(guess) == '2'
 
       next unless check_win(code_manager.code, save) == true
 
@@ -118,8 +125,13 @@ class Game
   end
 
   def incorrect_letters(algorithm, guess)
-    incorrect_letters_a.push(guess) if algorithm == 2
-    puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
+    if incorrect_letters_a.include?(guess)
+      p 'Already guessed that, try again'
+    else
+      incorrect_letters_a.push(guess) if algorithm == 2
+      puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
+      'yes'
+    end
 
     # Todo, make it so you dont have double of the same (like o, and o again in incorrect)
   end
