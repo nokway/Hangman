@@ -7,7 +7,7 @@ require_relative 'input_manager'
 
 # Main game handler
 class Game
-  attr_accessor :code_manager, :file_accessor, :lives_handler, :input_manager, :incorrect_letters_a, :save
+  attr_accessor :code_manager, :file_accessor, :lives_handler, :input_manager, :incorrect_letters_a, :save, :redo_guess
 
   @@count = 0
 
@@ -50,7 +50,7 @@ class Game
     if save == []
       code_manager.display_code
     else
-      p save.clone.split('')
+      p save
     end
     p incorrect_letters_a
 
@@ -82,28 +82,31 @@ class Game
   end
 
   def start
-    byebug
+    # byebug
     guess_save = get_save if file_accessor.empty_file?(@@count) == false
     round = 0
 
     loop do
       answer = save_game? if round != 0 && redo_guess == 'no'
       if answer
-        file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join('')))
+        file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join(''),
+                                                        incorrect_letters_a))
         puts "Saved word: #{save}, exited successfully. "
         break
       end
 
-      round += 1
+      round += 1 if redo_guess == 'no'
 
       play_round_guess
       guess = input_manager.guess_i
 
       redo if play_round_rest(guess) == '2'
 
+      self.redo_guess = 'no'
+
       next unless check_win(code_manager.code, save) == true
 
-      if lives_handler.lives == code_manager.code.length
+      if incorrect_letters_a.length == code_manager.code.length
         p 'You lost, insufficient amount of lives'
         p "Lives: #{lives_handler.lives}"
         break
@@ -127,6 +130,7 @@ class Game
   def incorrect_letters(algorithm, guess)
     if incorrect_letters_a.include?(guess)
       p 'Already guessed that, try again'
+      self.redo_guess = 'yes'
     else
       incorrect_letters_a.push(guess) if algorithm == 2
       puts "Incorrect letters: #{incorrect_letters_a.clone.map { |v| "#{v} " }}"
