@@ -85,6 +85,7 @@ class Game
   end
 
   def start
+    byebug
     guess_save = get_save if file_accessor.empty_file?(@@count) == false
     round = 0
 
@@ -107,7 +108,7 @@ class Game
 
       play_round_guess
       guess = input_manager.guess_i
-      byebug
+
       redo if play_round_rest(guess) == '2'
 
       self.redo_guess = 'no'

@@ -13,6 +13,10 @@ class Code
     p(copy.split('').map { |_| '_' })
   end
 
+  def returnCodeArray
+    code.split('')
+  end
+
   def algorithmize(guess)
     copy = code.clone.split('')
     return false if guess.size != 1
@@ -25,12 +29,12 @@ class Code
   end
 
   def fill_nill(save)
-    save_clone = save.clone
+    save_clone = save.clone.split('')
     save_clone.each_with_index do |v, i|
       save_clone[i] = '_' if v.nil?
     end
 
-    save_clone
+    save_clone.join('')
   end
 
   def missing_values(guess, save)
