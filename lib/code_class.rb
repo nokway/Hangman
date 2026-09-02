@@ -49,6 +49,8 @@ class Code
   end
 
   def total_output(guess, save)
+    return '' if [[], ''].include?(save)
+
     fill_nill(missing_values(guess, save))
   end
 end

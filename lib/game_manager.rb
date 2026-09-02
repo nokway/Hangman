@@ -50,7 +50,7 @@ class Game
   end
 
   def play_round_guess
-    if save == []
+    if [[], ''].include?(save)
       code_manager.display_code
     else
       p save
