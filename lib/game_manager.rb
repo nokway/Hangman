@@ -17,7 +17,7 @@ class Game
     @lives_handler = Lives.new
     @input_manager = InputManager.new
     @incorrect_letters_a = []
-    @save = []
+    @save = ''
     @@count += 1
     @redo_guess = 'no'
   end
