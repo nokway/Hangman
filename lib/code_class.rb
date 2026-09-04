@@ -29,12 +29,12 @@ class Code
   end
 
   def fill_nill(save)
-    save_clone = save.clone.split('')
+    save_clone = save.clone
     save_clone.each_with_index do |v, i|
-      save_clone[i] = '_' if v.nil?
+      save_clone[i] = '_' if v.nil? || v == ''
     end
 
-    save_clone.join('')
+    save_clone
   end
 
   def missing_values(guess, save)
@@ -49,8 +49,6 @@ class Code
   end
 
   def total_output(guess, save)
-    return '' if [[]].include?(save)
-
     fill_nill(missing_values(guess, save))
   end
 end

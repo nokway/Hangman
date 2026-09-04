@@ -17,7 +17,7 @@ class Game
     @lives_handler = Lives.new
     @input_manager = InputManager.new
     @incorrect_letters_a = []
-    @save = ''
+    @save = []
     @@count += 1
     @redo_guess = 'no'
   end
@@ -40,7 +40,7 @@ class Game
     code_manager.code = data['word']
     self.incorrect_letters_a = data['incorrect_array']
 
-    return unless check_win(code_manager.code, save) == true
+    return unless check_win(code_manager.code.clone.split(''), save) == true
 
     'won already'
   end
@@ -50,7 +50,7 @@ class Game
   end
 
   def play_round_guess
-    if [[], ''].include?(save)
+    if [[]].include?(save)
       code_manager.display_code
     else
       p save
@@ -85,7 +85,6 @@ class Game
   end
 
   def start
-    byebug
     guess_save = get_save if file_accessor.empty_file?(@@count) == false
     round = 0
 
@@ -98,7 +97,7 @@ class Game
       end
       answer = save_game? if round != 0 && redo_guess == 'no'
       if answer
-        file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save.join(''),
+        file_accessor.save_file(Serialization.save_data(lives_handler.lives, code_manager.code, save,
                                                         incorrect_letters_a))
         puts "Saved word: #{save}, exited successfully. "
         break
@@ -106,6 +105,7 @@ class Game
 
       round += 1 if redo_guess == 'no'
 
+      byebug
       play_round_guess
       guess = input_manager.guess_i
 
@@ -113,7 +113,7 @@ class Game
 
       self.redo_guess = 'no'
 
-      next unless check_win(code_manager.code, save) == true
+      next unless check_win(code_manager.code.clone.split(''), save) == true
 
       if incorrect_letters_a.length == code_manager.code.length
         p 'You lost, insufficient amount of lives'
